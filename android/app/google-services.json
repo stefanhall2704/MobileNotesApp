@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "771359961950",
+    "project_id": "mynotes-stefan",
+    "storage_bucket": "mynotes-stefan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771359961950:android:d55448a485c9ac0fdd55cf",
+        "android_client_info": {
+          "package_name": "se.stefanhall.mynotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771359961950-hlqsmoa7ccv66mrsdp6p69d9jcogrubi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbl8MMcBOlCaxM3Fsssh1DNASyQJgmEac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771359961950-hlqsmoa7ccv66mrsdp6p69d9jcogrubi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mynotes/constants/routes.dart';
+
+import '../utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -64,40 +67,47 @@ class _LoginViewState extends State<LoginView> {
               final email = _email.text;
               final password = _password.text;
               try {
-                final userCredential = await FirebaseAuth.instance
+                await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
-                        email: email, password: password);
-                print(userCredential);
+                  email: email,
+                  password: password,
+                )
+                    .then(((value) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    notesRoute,
+                    (route) => false,
+                  );
+                }));
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
-                  print("User not found");
+                  await showErrorDialog(
+                    context,
+                    "User Not Found",
+                  );
                 } else if (e.code == "wrong-password") {
-                  print("Wrong Password");
+                  await showErrorDialog(
+                    context,
+                    "Incorrect Password",
+                  );
+                } else {
+                  await showErrorDialog(
+                    context,
+                    "Error: ${e.code}",
+                  );
                 }
+              } catch (e) {
+                await showErrorDialog(
+                  context,
+                  e.toString(),
+                );
               }
             },
             child: const Text('Login'),
           ),
-          // TextButton(
-          //   style: raisedButtonStyle,
-          //   onPressed: () {
-          //     try {
-          //       final userCredential = FirebaseAuth.instance.signOut;
-          //       print(userCredential);
-          //     } on FirebaseAuthException catch (e) {
-          //       if (e.code == 'user-not-found') {
-          //         print("User not found");
-          //       } else if (e.code == "wrong-password") {
-          //         print("Wrong Password");
-          //       }
-          //     }
-          //   },
-          //   child: const Text('Logout'),
-          // ),
           TextButton(
             onPressed: (() {
               Navigator.of(context)
-                  .pushNamedAndRemoveUntil('/register/', (route) => false);
+                  .pushNamedAndRemoveUntil(registerRoute, (route) => false);
             }),
             child: const Text('Not Register Yet? You can Register Here!'),
           )

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotes/constants/routes.dart';
 
 class VerifiyEmailView extends StatefulWidget {
   const VerifiyEmailView({super.key});
@@ -8,6 +9,16 @@ class VerifiyEmailView extends StatefulWidget {
   State<VerifiyEmailView> createState() => _VerifiyEmailViewState();
 }
 
+final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+  foregroundColor: Colors.black54,
+  backgroundColor: Colors.lightBlue,
+  minimumSize: const Size(88, 36),
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  ),
+);
+
 class _VerifiyEmailViewState extends State<VerifiyEmailView> {
   @override
   Widget build(BuildContext context) {
@@ -15,9 +26,15 @@ class _VerifiyEmailViewState extends State<VerifiyEmailView> {
       appBar: AppBar(title: const Text('Verify Email')),
       body: Column(
         children: [
-          const Text('Send Email Verification'),
+          const SizedBox(
+            width: 250,
+            child: Text(
+                "We've sent an email to your account. Please check your email, including spam folder, so you can verify your account."),
+          ),
+          const Text(
+              "If you haven't received a confirmation email yet, please press the button below."),
           TextButton(
-            // style: raisedButtonStyle,
+            style: raisedButtonStyle,
             onPressed: () async {
               final user = FirebaseAuth.instance.currentUser;
               await user?.sendEmailVerification().then(
@@ -30,12 +47,6 @@ class _VerifiyEmailViewState extends State<VerifiyEmailView> {
               );
             },
             child: const Text('Send Email Verification'),
-          ),
-          TextButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-            },
-            child: const Text("Sign Out"),
           ),
         ],
       ),
@@ -50,11 +61,19 @@ Future<void> emailVerificationDialog(BuildContext context, email) {
       return AlertDialog(
         title: const Text("Verification Email Sent"),
         content: Text(
-            "Please check your spam folder in your email for the following email: $email"),
+            "We've sent another verification email. Please check your spam folder in your email for the following email: $email"),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: (() async {
               Navigator.of(context).pop();
+              await FirebaseAuth.instance.signOut().then(
+                (value) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    loginRoute,
+                    (route) => false,
+                  );
+                },
+              );
             }),
             child: const Text("Ok"),
           )
